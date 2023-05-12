@@ -22,7 +22,10 @@ def identify_swing_points_optimized(df, timeframes, get_swing_values=True, inter
     # Iterate through each timeframe
     for timeframe in timeframes:
         # Resample the DataFrame to the specified timeframe
-        resampled_df = df.resample(timeframe).agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
+        if timeframe == '4H':
+            resampled_df = df.resample(timeframe, offset='2H').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
+        else:
+            resampled_df = df.resample(timeframe).agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
 
         # Calculate swing highs: A point is a swing high if its high is greater than the high to the left and right
         swing_highs = ((resampled_df['high'] > resampled_df['high'].shift(1)) & (resampled_df['high'] > resampled_df['high'].shift(-1))).shift(2)

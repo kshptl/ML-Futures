@@ -33,7 +33,10 @@ def calculate_log_return_2d(arr, calling_function=''):
 def identify_fair_value_gaps_optimized(df, timeframes, get_high_low=True):
     df_with_fvg = df.copy(deep=True)
     for timeframe in timeframes:
-        resampled_df = df.resample(timeframe).agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
+        if timeframe == '4H':
+            resampled_df = df.resample(timeframe, offset='2H').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
+        else:
+            resampled_df = df.resample(timeframe).agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
         high_shifted = resampled_df['high'].shift(2)
         low_shifted = resampled_df['low'].shift(2)
         gap_up = (high_shifted < resampled_df['low'])
