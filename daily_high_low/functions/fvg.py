@@ -95,7 +95,7 @@ def fvg_to_feature_optimized(df, lookback, log_returns=True):
             windows = np.lib.stride_tricks.sliding_window_view(mask[1:].index, lookback) # we need {lookback+1} to do the log_returns for fvg_high/fvg_low even though the length stays {lookback}. The first row value is always NaN, since there is no previous value, so we ignore that in the sliding view.
         else:
             windows = np.lib.stride_tricks.sliding_window_view(mask.index, lookback)
-        deltas = (windows[:, -1:] - windows[:, :]) / np.timedelta64(1, 's') // 60
+        deltas = ((windows[:, -1:] - windows[:, :]) / pd.Timedelta(minutes=1)).astype(int)
         deltas_index = [pd.to_datetime(w[-1]) for w in windows]
         fvg_high = np.lib.stride_tricks.sliding_window_view(mask[f'{c}_high'], lookback_fvg)
         fvg_low = np.lib.stride_tricks.sliding_window_view(mask[f'{c}_low'], lookback_fvg)

@@ -28,10 +28,10 @@ def identify_swing_points_optimized(df, timeframes, get_swing_values=True, inter
             resampled_df = df.resample(timeframe).agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}).dropna()
 
         # Calculate swing highs: A point is a swing high if its high is greater than the high to the left and right
-        swing_highs = ((resampled_df['high'] > resampled_df['high'].shift(1)) & (resampled_df['high'] > resampled_df['high'].shift(-1))).shift(2)
+        swing_highs = ((resampled_df['high'] > resampled_df['high'].shift(1)) & (resampled_df['high'] > resampled_df['high'].shift(-1))).shift(2).replace(np.nan, False)
 
         # Calculate swing lows: A point is a swing low if its low is lower than the low to the left and right
-        swing_lows = ((resampled_df['low'] < resampled_df['low'].shift(1)) & (resampled_df['low'] < resampled_df['low'].shift(-1))).shift(2)
+        swing_lows = ((resampled_df['low'] < resampled_df['low'].shift(1)) & (resampled_df['low'] < resampled_df['low'].shift(-1))).shift(2).replace(np.nan, False)
 
         if get_swing_values:
             # Create new columns for swing high and low prices
