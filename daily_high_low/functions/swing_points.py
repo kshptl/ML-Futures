@@ -40,8 +40,9 @@ def identify_swing_points_optimized(df, timeframes, get_swing_values=True, inter
             
         else:
             # Create new columns for swing high and low prices
-            df[f'swing_high_{timeframe}'] = swing_highs.reindex(df.index).astype('float32')
-            df[f'swing_low_{timeframe}'] = swing_lows.reindex(df.index).astype('float32')
+            #df[f'swing_high_{timeframe}'] = swing_highs.reindex(df.index).astype('float32')
+            #df[f'swing_low_{timeframe}'] = swing_lows.reindex(df.index).astype('float32')
+            df[f'swing_{timeframe}'] = swing_lows.reindex(df.index).astype('float32')
             
         
     # Interpolate or forward fill the NaN values based on the specified interpolation method
